@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分奖励与祷告助手</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background: linear-gradient(to bottom, #87CEFA, #f9f9f9);
+            text-align: center;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 2.2em;
+            color: #007BFF;
+        }
+        .input-box {
+            margin: 20px 0;
+        }
+        .input-box input {
+            padding: 12px;
+            width: 75%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .reward, .prayer-tip {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .reward {
+            color: #6c757d;
+        }
+        .prayer-tip {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>积分奖励与祷告助手</h1>
+        <p>输入数字，更新积分，并获得来自圣经的鼓励与祷告提醒！</p>
+        <div class="input-box">
+            <input type="number" id="inputValue" placeholder="输入一个数字">
+        </div>
+        <button onclick="addPoints()">提交积分</button>
+        <button onclick="resetPoints()">重置积分</button>
+        <div class="reward" id="rewardMessage"></div>
+        <p>当前积分：<span id="points">0</span></p>
+        <div class="prayer-tip" id="prayerTip"></div>
+    </div>
+
+    <script>
+        let totalPoints = parseInt(localStorage.getItem("totalPoints")) || 0;
+        updateDisplay();
+
+        function addPoints() {
+            const input = document.getElementById("inputValue").value;
+            const points = parseInt(input);
+
+            if (!isNaN(points) && points > 0) {
+                totalPoints += points;
+                localStorage.setItem("totalPoints", totalPoints);
+                updateDisplay();
+            } else {
+                alert("请输入一个有效的正整数！");
+            }
+
+            document.getElementById("inputValue").value = "";
+        }
+
+        function resetPoints() {
+            if (confirm("确定要重置积分吗？")) {
+                totalPoints = 0;
+                localStorage.setItem("totalPoints", totalPoints);
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById("points").textContent = totalPoints;
+
+            let rewardMessage = "";
+            let prayerTip = "";
+            if (totalPoints < 10) {
+                rewardMessage = "再接再厉！“凡你所行的，要认定耶和华，他必指引你的路。” (箴言 3:6)";
+                prayerTip = "为今天的努力向神祷告，求他赐下智慧。";
+            } else if (totalPoints < 50) {
+                rewardMessage = "不错哦！“你要专心仰赖耶和华，不可倚靠自己的聪明。” (箴言 3:5)";
+                prayerTip = "记得为学习中的困难交托祷告，神与你同在！";
+            } else if (totalPoints < 100) {
+                rewardMessage = "你已经走得很远！“我靠着那加给我力量的，凡事都能做。” (腓立比书 4:13)";
+                prayerTip = "感恩神的恩典，并求他帮助你继续进步。";
+            } else {
+                rewardMessage = "满分大佬！“耶和华是我的牧者，我必不致缺乏。” (诗篇 23:1)";
+                prayerTip = "为神的丰盛恩典感恩，并寻求祂对你下一步的指引。";
+            }
+
+            document.getElementById("rewardMessage").textContent = rewardMessage;
+            document.getElementById("prayerTip").textContent = prayerTip;
+        }
+    </script>
+</body>
+</html>
